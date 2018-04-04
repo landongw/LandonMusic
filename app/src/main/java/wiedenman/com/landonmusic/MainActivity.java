@@ -1,5 +1,6 @@
 package wiedenman.com.landonmusic;
 
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -16,16 +17,24 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        final DownloadThread thread = new DownloadThread();
+        thread.setName("DownloadThread");
+        thread.start();
+
         mDownloadButton = (Button) findViewById(R.id.downloadButton);
 
         mDownloadButton.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick (View v){
                 Toast.makeText(MainActivity.this, "Downloading", Toast.LENGTH_SHORT).show();
 
-                DownloadThread thread = new DownloadThread();
-                thread.setName("DownloadThread");
-                thread.start();
+                // Send Messages to Handler for processing
+                for (String song : PlayList.songs) {
+                    Message message = Message.obtain();
+                    message.obj = song;  // Allows objects to be attached to Message
+                    thread.mHandler.sendMessage(message);
+                }
             }
         });
     }

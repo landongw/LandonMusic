@@ -1,5 +1,6 @@
 package wiedenman.com.landonmusic;
 
+import android.os.Looper;
 import android.util.Log;
 
 import static android.content.ContentValues.TAG;
@@ -8,22 +9,16 @@ public class DownloadThread extends Thread {
 
     private static final String TAG = DownloadThread.class.getSimpleName();
 
+    public DownloadHandler mHandler;
+
     @Override
     public void run() {
         for (String song : PlayList.songs) {
-            downloadSong();
+            Looper.prepare();  // Looper gets the messages from the queue
+            mHandler = new DownloadHandler();  // Handler processes the messages
+            Looper.loop(); // Loop over the message queue
         }
     }
 
-    private void downloadSong() {
-        long endTime = System.currentTimeMillis() + 10*1000;  // simulates a 10 second download
-        while (System.currentTimeMillis() < endTime) {
-            try {
-                Thread.sleep(1000);// wait one second before looping
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-        Log.d(TAG, "Song downloaded!");
-    }
+
 }
