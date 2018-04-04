@@ -23,6 +23,6 @@ public class DownloadHandler extends Handler {
                 e.printStackTrace();
             }
         }
-        Log.d(TAG, song + "Song downloaded!");
+        Log.d(TAG, song + " Song downloaded!");
     }
 }
