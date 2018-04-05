@@ -8,10 +8,12 @@ import android.util.Log;
 public class DownloadHandler extends Handler {
 
     private static final String TAG = DownloadHandler.class.getSimpleName();
+    private DownloadService mService;
 
     @Override
     public void handleMessage(Message msg) {
         downloadSong(msg.obj.toString());
+        mService.stopSelf(msg.arg1); // stops the service only after it's handled all start ids
     }
 
     private void downloadSong(String song) {
@@ -24,5 +26,9 @@ public class DownloadHandler extends Handler {
             }
         }
         Log.d(TAG, song + " Song downloaded!");
+    }
+
+    public void setService(DownloadService service) {
+        mService = service;
     }
 }
